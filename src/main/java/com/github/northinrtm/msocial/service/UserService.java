@@ -1,7 +1,7 @@
 package com.github.northinrtm.msocial.service;
 
 import com.github.northinrtm.msocial.entity.User;
-import com.github.northinrtm.msocial.repository.UserRepositiry;
+import com.github.northinrtm.msocial.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,19 +12,19 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserService {
 
-    private final UserRepositiry userRepositiry;
+    private final UserRepository userRepository;
 
     public Optional<User> findByChatId(long chatId) {
-        return userRepositiry.findByChatId(chatId);
+        return userRepository.findByChatId(chatId);
     }
 
     public void createUser(long chatId){
         User user = new User(chatId, Instant.now());
-        userRepositiry.save(user);
+        userRepository.save(user);
     }
 
     public void updateMessageDate(User user){
         user.setLastMessageAt(Instant.now());
-        userRepositiry.save(user);
+        userRepository.save(user);
     }
 }

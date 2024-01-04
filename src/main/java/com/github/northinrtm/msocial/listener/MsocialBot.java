@@ -40,6 +40,15 @@ public class MsocialBot extends DefaultAbsSender implements LongPollingBot {
             } else {
                 userService.updateMessageDate(userOptional.get());
             }
+            String request = update.getMessage().getText();
+            String response;
+            if (request.equals("/start")) {
+                response = "Привет!, "
+                        + update.getMessage().getFrom().getFirstName() + ", спасибо за обращение.";
+            } else {
+                response = "Вот тебе такой ответ на твой запрос: " + request;
+            }
+            messageService.createMessage(request,response, userChatId);
         }
     }
 
