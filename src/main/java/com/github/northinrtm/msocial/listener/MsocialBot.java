@@ -4,6 +4,7 @@ import com.github.northinrtm.msocial.entity.User;
 import com.github.northinrtm.msocial.service.DailyDomainService;
 import com.github.northinrtm.msocial.service.MessageService;
 import com.github.northinrtm.msocial.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -19,10 +20,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-
 @Component
+@Slf4j
 public class MsocialBot extends DefaultAbsSender implements LongPollingBot {
-
     private final UserService userService;
     private final MessageService messageService;
     private final DailyDomainService dailyDomainService;
@@ -42,6 +42,7 @@ public class MsocialBot extends DefaultAbsSender implements LongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        log.info("Update receive" + update);
         if (update.hasMessage()) {
             long userChatId = update.getMessage().getFrom().getId();
             Optional<User> userOptional = userService.findByChatId(userChatId);
@@ -74,19 +75,20 @@ public class MsocialBot extends DefaultAbsSender implements LongPollingBot {
             throw new RuntimeException(e);
         }
         messageService.createMessage(request, response, userChatId);
+        log.info("request and response saved");
     }
 
-    @Scheduled(fixedRate = 8000)
+    @Scheduled(cron = "0 0 12 * * ?")
     public void sendDomains() {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime localDateTime = LocalDateTime.now();
         long count = dailyDomainService.getCount();
         String message = dateTimeFormatter.format(localDateTime) + " : " + count + " доменов.";
-
         List<Long> chatIds = userService.getAllChatId();
         for (long id : chatIds){
             createAndSendMessage("",message,id);
         }
+        log.info("sent to all users: " + message);
     }
 
     @Override

@@ -5,12 +5,14 @@ import com.github.northinrtm.msocial.entity.User;
 import com.github.northinrtm.msocial.repository.MessagesRepository;
 import com.github.northinrtm.msocial.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class MessageService {
 
     private final MessagesRepository messagesRepository;
@@ -24,6 +26,7 @@ public class MessageService {
             message.setResponse(response);
             message.setUser(userOptional.get());
             messagesRepository.save(message);
+            log.info("request and response saved");
         }
     }
 }
