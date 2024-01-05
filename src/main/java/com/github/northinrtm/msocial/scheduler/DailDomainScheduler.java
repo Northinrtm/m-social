@@ -19,7 +19,7 @@ public class DailDomainScheduler {
         this.dailyDomainService = dailyDomainService;
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(cron = "0 0 0 * * ?")
     public void fetchAndSaveDailyDomains() {
         RestTemplate restTemplate = new RestTemplate();
         DailyDomainDto[] dailyDomainArray = restTemplate.getForObject(backorder, DailyDomainDto[].class);
