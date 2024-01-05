@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,13 +19,17 @@ public class UserService {
         return userRepository.findByChatId(chatId);
     }
 
-    public void createUser(long chatId){
+    public void createUser(long chatId) {
         User user = new User(chatId, Instant.now());
         userRepository.save(user);
     }
 
-    public void updateMessageDate(User user){
+    public void updateMessageDate(User user) {
         user.setLastMessageAt(Instant.now());
         userRepository.save(user);
+    }
+
+    public List<Long> getAllChatId() {
+        return userRepository.getAllChatId();
     }
 }
