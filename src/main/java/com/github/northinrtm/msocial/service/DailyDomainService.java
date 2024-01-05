@@ -6,6 +6,8 @@ import com.github.northinrtm.msocial.repository.DailyDomainRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class DailyDomainService {
@@ -16,8 +18,12 @@ public class DailyDomainService {
     public void saveDataFromBackorder(DailyDomainDto[] dailyDomainDtos) {
         dailyDomainRepository.deleteAll();
         for (DailyDomainDto dailyDomainDto : dailyDomainDtos) {
-            dailyDomainRepository.save(dailyDomainMapper.toEntityFromDto(dailyDomainDto));
+            dailyDomainRepository.save(dailyDomainMapper.mapToDailyDomain(dailyDomainDto));
         }
+    }
+
+    public long getCount() {
+        return dailyDomainRepository.count();
     }
 
 }

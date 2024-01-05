@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DailyDomainRepository extends JpaRepository<DailyDomain, Long> {
+
 }
